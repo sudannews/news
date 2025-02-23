@@ -1,7 +1,7 @@
 {
     "name": " اخبار السودان",
     "short_name": "اخبار السودان",
-    "start_url": "/index.html",
+    "start_url": "/news",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
