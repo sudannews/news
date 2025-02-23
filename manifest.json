@@ -1,0 +1,21 @@
+{
+    "name": " اخبار السودان",
+    "short_name": "اخبار السودان",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+      {
+        "src": "img/IMG_٢٠٢٥٠٢٢٣_٢٣٤٤٢٣_(192_x_192_pixel).jpg",
+        "sizes": "192x192",
+        "type": "img/IMG_٢٠٢٥٠٢٢٣_٢٣٤٤٢٣_(192_x_192_pixel).jpg"
+      },
+      {
+        "src": "img/IMG_٢٠٢٥٠٢٢٣_٢٣٤٣٥٧_(512_x_512_pixel).jpg",
+        "sizes": "512x512",
+        "type": "image/file-PnwF6RJKFRk9DPoERADTHf (1).webp"
+      }
+    ]
+  }
+  
