@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <style>
+        /* تنسيق عام */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+        }
+
+        /* تنسيق النموذج */
+        form {
+            background: white;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: right;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* تنسيق الأخبار */
+        #admin-news-container {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: right;
+        }
+
+        .news-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .news-item h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .news-item p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .news-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .news-item a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .news-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* أزرار التعديل والحذف */
+        .news-item .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .news-item button {
+            padding: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .edit-btn {
+            background-color: orange;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: darkorange;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <h1>لوحة التحكم - إضافة وتعديل الأخبار</h1>
+
+    <form id="news-form">
+        <input type="hidden" id="edit-index">
+        <label for="title">عنوان الخبر:</label>
+        <input type="text" id="title" required>
+        
+        <label for="description">وصف الخبر:</label>
+        <textarea id="description" required></textarea>
+        
+        <label for="image">رابط الصورة:</label>
+        <input type="text" id="image" required>
+        
+        <label for="link">رابط الخبر:</label>
+        <input type="text" id="link" required>
+
+        <button type="submit">إضافة الخبر</button>
+    </form>
+
+    <h2>الأخبار الحالية</h2>
+    <div id="admin-news-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const newsForm = document.getElementById("news-form");
+            const newsContainer = document.getElementById("admin-news-container");
+            const editIndex = document.getElementById("edit-index");
+
+            function loadNews() {
+                const newsData = JSON.parse(localStorage.getItem("newsData")) || [];
+                newsContainer.innerHTML = "";
+                newsData.forEach((news, index) => {
+                    const newsItem = document.createElement("div");
+                    newsItem.classList.add("news-item");
+                    newsItem.innerHTML = `
+                        <h3>${news.title}</h3>
+                        <p>${news.description}</p>
+                        <img src="${news.image}" alt="${news.title}" width="100">
+                        <a href="${news.link}" target="_blank">رابط الخبر</a>
+                        <div class="btn-container">
+                            <button class="edit-btn" onclick="editNews(${index})">تعديل</button>
+                            <button class="delete-btn" onclick="deleteNews(${index})">حذف</button>
+                        </div>
+                    `;
+                    newsContainer.appendChild(newsItem);
+                });
+            }
+
+            newsForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const title = document.getElementById("title").value;
+                const description = document.getElementById("description").value;
+                const image = document.getElementById("image").value;
+                const link = document.getElementById("link").value;
+                const index = editIndex.value;
+
+                let newsData = JSON.parse(localStorage.getItem("newsData")) || [];
+
+                if (index === "") {
+                    // إضافة خبر جديد
+                    newsData.unshift({ title, description, image, link });
+                } else {
+                    // تعديل خبر موجود
+                    newsData[index] = { title, description, image, link };
+                    editIndex.value = "";
+                    newsForm.querySelector("button").innerText = "إضافة الخبر";
+                }
+
+                localStorage.setItem("newsData", JSON.stringify(newsData));
+                newsForm.reset();
+                loadNews();
+            });
+
+            window.editNews = function (index) {
+                const newsData = JSON.parse(localStorage.getItem("newsData")) || [];
+                const news = newsData[index];
+
+                document.getElementById("title").value = news.title;
+                document.getElementById("description").value = news.description;
+                document.getElementById("image").value = news.image;
+                document.getElementById("link").value = news.link;
+                editIndex.value = index;
+
+                newsForm.querySelector("button").innerText = "حفظ التعديلات";
+            };
+
+            window.deleteNews = function (index) {
+                let newsData = JSON.parse(localStorage.getItem("newsData")) || [];
+                newsData.splice(index, 1);
+                localStorage.setItem("newsData", JSON.stringify(newsData));
+                loadNews();
+            };
+
+            loadNews();
+        });
+    </script>
+    
+</body>
+</html>
