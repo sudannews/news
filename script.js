@@ -42,85 +42,30 @@ document.addEventListener("DOMContentLoaded", updateLiveEvent);
 // تحديث كل 30 ثانية
 setInterval(updateLiveEvent, 30000);
 // بيانات الأخبار
-const newsData = [
-    { 
-        title: 'السيطره على الدعم السريع', 
-        description: 'تم السيطر على مواقع....', 
-        image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٥٠٩_(600_x_600_pixel).jpg', 
-        link: 'home news/news1.html' 
-    },
-    { 
-        title: 'القطينه كاكي اخضر', 
-        description: 'اعلن قائد من....', 
-        image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٤٥٥_(600_x_600_pixel).jpg', 
-        link: 'home news/news2.html' 
-    },
-    { 
-        title: 'شرق النيل اليوم', 
-        description: 'نشر جنود من الجيش السوداني....', 
-        image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٤٤٠_(600_x_600_pixel).jpg', 
-        link: 'home news/news3.html' 
-    },
-    { 
-        title: 'قصف جوي استهدف', 
-        description: 'قص جوي عنيف استهدف اليات.....', 
-        image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٤٤٠_(600_x_600_pixel).jpg', 
-        link: 'home news/news4.html' 
-    },
-    { 
-        title: 'فلم الدشاش', 
-        description: ' ...فيلم الدشاش يحقق 281 ألف جنيه ليلة السبت في السينمات', 
-        image: 'img/202501150337163716.webp', 
-        link: 'home news/news5.html' 
-    },
-    { 
-        title: 'السيطره على الدعم السريع', 
-        description: 'تم السيطر على مواقع....', 
-        image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٥٠٩_(600_x_600_pixel).jpg',  
-        link: 'home news/news6.html' 
-    },
-{ 
-    title: 'القطينه كاكي اخضر', 
-    description: 'اعلن قائد من....', 
-    image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٤٥٥_(600_x_600_pixel).jpg', 
-        link: 'home news/news7.html' 
-    },
-{ 
-    title: 'شرق النيل اليوم', 
-    description: 'نشر جنود من الجيش السوداني....', 
-    image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٤٤٠_(600_x_600_pixel).jpg', 
-    link: 'home news/news8.html' 
-    },
-{ 
-    title: 'قصف جوي استهدف', 
-    description: 'قص جوي عنيف استهدف اليات.....', 
-    image: 'img/IMG_٢٠٢٥٠٢٢٣_٢١٥٤٤٠_(600_x_600_pixel).jpg', 
-    link: 'home news/news9.html' 
-    },
-{ 
-        title: 'فلم الدشاش', 
-        description: ' ...فيلم الدشاش يحقق 281 ألف جنيه ليلة السبت في السينمات', 
-        image: 'img/202501150337163716.webp', 
-         
-        link: 'home news/news10.html' 
-    },
-];
+// بيانات الأخبار
+document.addEventListener("DOMContentLoaded", function () {
+    const newsContainer = document.getElementById("news-container");
+    const tickerContent = document.getElementById("ticker-content");
 
-// عرض الأخبار في الصفحة
-const newsContainer = document.getElementById('news-container');
+    function loadNews() {
+        const newsData = JSON.parse(localStorage.getItem("newsData")) || [];
+        newsContainer.innerHTML = "";
 
-newsData.forEach((news) => {
-    const newsItem = document.createElement('div');
-    newsItem.classList.add('news-item');
-    newsItem.innerHTML = `
-        <img src="${news.image}" alt="${news.title}">
-        <h2>${news.title}</h2>
-        <p>${news.description}</p>
-        <a href="${news.link}" class="read-more">قراءة المزيد</a>
-    `;
-    newsContainer.appendChild(newsItem);
+        newsData.forEach((news) => {
+            const newsItem = document.createElement("div");
+            newsItem.classList.add("news-item");
+            newsItem.innerHTML = `
+                <img src="${news.image}" alt="${news.title}">
+                <h2>${news.title}</h2>
+                <p>${news.description}</p>
+                <a href="${news.link}" class="read-more">قراءة المزيد</a>
+            `;
+            newsContainer.appendChild(newsItem);
+        });
+
+        // تحديث شريط الأخبار المتحرك
+        tickerContent.textContent = newsData.map(news => news.title).join(' | ');
+    }
+
+    loadNews();
 });
-
-// شريط الأخبار المتحرك
-const tickerContent = document.getElementById('ticker-content');
-tickerContent.textContent = newsData.map(news => news.title).join(' | ');
